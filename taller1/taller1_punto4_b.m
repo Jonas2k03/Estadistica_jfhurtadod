@@ -1,11 +1,20 @@
 clc;
 
+
+dim = size(A);
+
+% Comprobamos si es un vector columna (nx1)
+if dim(1) > 1 &&  dim(2) == 1 
+    % Calculamos la traspuesta para convertirlo en un vector fila (1xn)
+    A = A';
+end
+
 %CREACION DE LA TABLA DE FRECUENCIAS. 
 % CALCULAR EL MAXIMO DATO
-maximo = max(dc);
+maximo = max(A);
 
 % CALCULAR EL MINIMO DATO
-minimo = min(dc);
+minimo = min(A);
 
 % CALCULAR EL RANGO 
 rango = maximo - minimo;
@@ -28,8 +37,8 @@ mc = minMarcaClase:amplitudClases:maxMarcaClase;
 % Inicializar el vector de frecuencias absolutas con ceros
 fa = zeros(1, numel(intervalos) - 1);
 
-% Iterar sobre cada elemento de dc y contar en qué intervalo cae
-for elemento = dc
+% Iterar sobre cada elemento de A y contar en qué intervalo cae
+for elemento = A
     for indice = 1:numel(intervalos)-1 % Indice va desde el 1 hasta la cantidad total de intervalos menos 1.
 
         if indice == numel(intervalos)-1 % Si estamos en el último intervalo
@@ -55,7 +64,7 @@ end
 fac = cumsum(fa); 
 
 %Calcular las frecuencias relativas.
-far = fa/length(dc);
+far = fa/length(A);
 
 %Calcular las frecuencias relativas acumuladas.
 fara = cumsum(far);
@@ -107,16 +116,16 @@ end
 
 
 %Media de datos crudos
-mediaCrudos = mean(dc);
+mediaCrudos = mean(A);
 
 %Media de datos tabulados
-mediaTabulados = sum(mc.*fa)/length(dc);
+mediaTabulados = sum(mc.*fa)/length(A);
 
 %Media de datos simulados
 mediaSimulados = mean(ds);
 
 %Moda de datos crudos
-modaCrudos = mode(dc);
+modaCrudos = mode(A);
 
 %Moda de los datos tabulados
 modaTabulados=mc(find(fa==max(fa))); %Encontrar el indice donde se encuentra la frecuencia más alta.
@@ -129,29 +138,29 @@ modaTabulados=mc(find(fa==max(fa))); %Encontrar el indice donde se encuentra la 
 modaSimulados = mode(ds); 
 
 %Desviación estándar de los datos crudos                                    
-desvEstCrudos = std(dc);
+desvEstCrudos = std(A);
 
 %Desviación estandar de los datos tabulados
-desvEstTabulados = sqrt(sum(fa.*((mc-mediaTabulados).^(2)))/length(dc)-1);
+desvEstTabulados = sqrt(sum(fa.*((mc-mediaTabulados).^(2)))/length(A)-1);
 
 desvEstSimulados = std(ds);
 
 %Percentiles
 
     %Percentil 25 en datos crudos
-    prcC25 = prctile(dc,25);
+    prcC25 = prctile(A,25);
 
     %Percentil 25 en datos tabulados
-    prcT25 = fn_percentil_dTabulados(25,length(dc),fac,intervalos,fa,amplitudClases);
+    prcT25 = fn_percentil_dTabulados(25,length(A),fac,intervalos,fa,amplitudClases);
 
     %Percentil 25 en datos simulados
     prcS25 = prctile(ds,25);
 
     %Percentil 74.4 en datos crudos
-    prcC74 = prctile(dc,74.4);
+    prcC74 = prctile(A,74.4);
 
     %Percentil 74.4 en datos tabulados
-    prcT74 = fn_percentil_dTabulados(74.4,length(dc),fac,intervalos,fa,amplitudClases);
+    prcT74 = fn_percentil_dTabulados(74.4,length(A),fac,intervalos,fa,amplitudClases);
 
     %Percentil 74.4 en datos simulados
     prcS74 = prctile(ds,74.4);
@@ -159,10 +168,10 @@ desvEstSimulados = std(ds);
 
     
     %Percentil 91 en datos crudos
-    prcC91 = prctile(dc,91);
+    prcC91 = prctile(A,91);
 
     %Percentil 91 en datos tabulados
-    prcT91 = fn_percentil_dTabulados(91,length(dc),fac,intervalos,fa,amplitudClases);
+    prcT91 = fn_percentil_dTabulados(91,length(A),fac,intervalos,fa,amplitudClases);
 
     %Percentil 91 en datos simulados
     prcS91 = prctile(ds,91);
@@ -185,7 +194,7 @@ disp(tabla);
 
 % Histograma de datos crudos
 subplot(1, 2, 1); % 1 fila, 2 columnas, primer gráfico
-hist(dc, 7, 'FaceColor', 'skyblue', 'EdgeColor', 'black');
+hist(A, 7, 'FaceColor', 'skyblue', 'EdgeColor', 'black');
 title('Histograma de Datos Crudos');
 xlabel('Valor');
 ylabel('Frecuencia');
