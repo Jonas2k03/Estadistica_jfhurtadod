@@ -3,24 +3,24 @@ clc;
 
 %QUEMAR LOS DATOS A PARTIR DE LO QUE SE VE EN EL HISTOGRAMA 
 % CALCULAR EL MAXIMO DATO
-maximo = 185;
+maximo = 60;
 
 % CALCULAR EL MINIMO DATO
-minimo = 150;
+minimo = 0;
 
 % CALCULAR EL RANGO 
 rango = maximo - minimo;
-cantidadDatos= 29;
-nc=7;
-ns=10000;
+cantidadDatos= 40;
+nc=6;
+ns=40;
 
 fa = [2 
-      5 
-      5 
-      6 
-      5 
-      4 
-      2];
+       6
+       12
+       10
+       6
+       4
+      ];
 
 far= fa / cantidadDatos;
 
@@ -108,5 +108,6 @@ disp(tabla);
 hist(ds, nc, 'FaceColor', 'salmon', 'EdgeColor', 'black');
 title('Histograma de Datos Simulados');
 xlabel('Valor');
-ylabel('Frecuencia');
+ylabel('Frecuencia');A
 
+p20 = prctile(ds,20)
