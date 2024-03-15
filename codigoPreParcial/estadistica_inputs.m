@@ -17,7 +17,7 @@ dc=floor(dc); %Descomentar si los datos crudos son para edades.
                                %numero de clases
 
                               
-nc = 15;
+nc = 7;
 ns = 2000;
 
 %Los siguientes procedimientos aseguran que "dc" sea un vector
