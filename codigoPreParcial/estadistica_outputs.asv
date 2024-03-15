@@ -102,7 +102,7 @@ modaTabuladosNum=mc(find(fa==max(fa))); %Encontrar el indice donde se encuentra 
                                      %La moda será el valor del vector de
                                      %las marcas de clase en ese indice.
 
-if (length(modaTabuladosNum) > 1)
+
     modaTabulados = '';
     for i = 1:numel(modaTabuladosNum)
         if(i == 1)
@@ -112,18 +112,15 @@ if (length(modaTabuladosNum) > 1)
 
         elseif(i == numel(modaTabuladosNum))
         break;
-
+        
         else 
             modaTabuladosSiguiente = num2str(modaTabuladosNum(i+1));
             modaTabulados = strcat(modaTabulados, " & ", modaTabuladosSiguiente);
         end
         
     end
-    
-else 
-    modaTabulados = modaTabuladosNum;
-end
                                     
+   %modaTabulados = strtrim(modaTabulados);
 
 %Moda de datos simualados
 modaSimulados = mode(ds); 

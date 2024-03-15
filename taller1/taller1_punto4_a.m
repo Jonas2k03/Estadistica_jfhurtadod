@@ -14,26 +14,31 @@ A=clmMaxZ;
 %}
 
 cont = 0;
-while true 
-    %Media
-    vMedia = mean(A);
-    
-    %Desviacion estandar 
-    vDevEstandar = std(A);
-    
-    %Tipificacion
-    z = (A-vMedia)/vDevEstandar;
+while true
 
-    li=vMedia-3*vDevEstandar;
-    ls=vMedia+3*vDevEstandar;
+    %Calcular el primer cuartil
+    q1 = prctile(A,25);
+
+    %Calcular el segundo cuartil
+    q3 = prctile(A,75);
+
+    %Rango intercuartil
+    iqr= q3 - q1;
+
+    %Calcular el bigote inferior
+    bigoteInf = q1 - 1.5*iqr;
+
+    %Calcular el bigote superior
+    bigoteSup = q3 + 1.5*iqr;
+    
+
     
     %outlier inferior
-    oi = find (z<-3);
-    minOi= li - A(oi);
-    
+    oi = find (A < bigoteInf);
+    minOi= bigoteInf - A(oi);
     %outlier superior
-    os = find (z > 3);
-    maxOs= A(os)-ls;
+    os = find (A > bigoteSup);
+    maxOs= A(os)-bigoteSup;
     
     %Outliers
     o= [minOi
@@ -49,47 +54,44 @@ while true
         A(eliminar) = [];  % Elimina el outlier superior de A
     end
 
-    disp("Longitud de outliers: " + length(o))
-
-    cont = cont + 1;
-    disp("Longitud de outliers: " + length(o))
-    if (length(o)<=0)
-        disp("Iteraciones hechas: " + cont)
+    
+    
+    if (isempty(o))
+        disp("Iteraciones hechas: " + cont) 
+        disp("Longitud de outliers: " + length(o))
+        disp("Datos restantes después del filtro: " + length(A));
+        disp("Datos eliminados: " + (length(clmMaxZ) - length(A)));
         break;
     end
-
-    disp("LONGITUD DEL VECTOR DE LOS DATOS: " + length(A) + " en la iteracion " + cont)
+    cont = cont + 1;
   
 end
          
 
 
-% Antes de crear el gráfico
+
+
+
+%Boxplot antes del filtro
 figure;
 boxplot(clmMaxZ);
-hold on;
-title('Boxplot con antes del filtro');
+title('Boxplot antes del filtro');
 
-
-
-
-% Después de crear el gráfico|
-figure;
+%Boxplot después del filtro
 boxplot(A);
 title('Boxplot después del filtro');
 
-
+%Histograma antes del filtro
 figure;
-% Histograma de datos crudos
 subplot(1, 2, 1); % 1 fila, 2 columnas, primer gráfico
-hist(clmMaxZ, 7, 'FaceColor', 'skyblue', 'EdgeColor', 'black');
+hist(clmMaxZ)
 title('Histograma antes del filtro');
 xlabel('Valor');
 ylabel('Frecuencia');
 
-% Histograma de datos simulados
+%Histograma después del filtro
 subplot(1, 2, 2); % 1 fila, 2 columnas, segundo gráfico
-hist(A, 7, 'FaceColor', 'salmon', 'EdgeColor', 'black');
+hist(A)
 title('Histograma después del filtro');
 xlabel('Valor');
 ylabel('Frecuencia');
