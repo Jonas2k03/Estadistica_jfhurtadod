@@ -2,44 +2,44 @@ clc;
 % Calculos para el vector de edades
     
     %Calcular el máximo dato
-    maxima_edad = max(v_edades);
+    maxima_y = max(data_y);
     
     % CALCULAR EL MINIMO DATO
-    minimo_edad = min(v_edades);
+    minimo_y = min(data_y);
     
     % CALCULAR EL RANGO 
-    rango_edad = maxima_edad - minimo_edad;
+    rango_y = maxima_y - minimo_y;
     
     % CALCULAR LA AMPLITUD DE LAS CLASES
-    amplitudClasesEdades = rango_edad/numClases_edad;
+    amplitudClasesY = rango_y/numClases_y;
     
     % CREAR EL VECTOR CUYO CONTENIDO SON LOS INTERVALOS A CONSIDERAR
-    intervalosEdades = ceil(minimo_edad:amplitudClasesEdades:maxima_edad);
+    intervalosY = minimo_y:amplitudClasesY:maxima_y;
 
 
 
 % Calculos para el vector de estaturas
     
     %Calcular el máximo dato
-    maxima_estatura = max(v_estaturas);
+    maxima_x = max(data_x);
     
     % CALCULAR EL MINIMO DATO
-    minimo_estatura = min(v_estaturas);
+    minimo_x = min(data_x);
     
     % CALCULAR EL RANGO 
-    rango_estatura = maxima_estatura - minimo_estatura;
+    rango_x = maxima_x - minimo_x;
     
     % CALCULAR LA AMPLITUD DE LAS CLASES
-    amplitudClasesEstaturas = rango_estatura/numClases_estatura;
+    amplitudClasesX = rango_x/numClases_x;
     
     % CREAR EL VECTOR CUYO CONTENIDO SON LOS INTERVALOS A CONSIDERAR
-    intervalosEstaturas = minimo_estatura:amplitudClasesEstaturas:maxima_estatura;
+    intervalosX = minimo_x:amplitudClasesX:maxima_x;
 
 
-matriz = [v_estaturas',v_edades'];
+matriz = [data_x, data_y];
 [m,n] = size(matriz);
 
-matrizD = zeros(numClases_estatura, numClases_edad);
+matrizD = zeros(numClases_x, numClases_y);
 [mD,nD] = size(matrizD);
 
 
@@ -49,23 +49,23 @@ matrizD = zeros(numClases_estatura, numClases_edad);
 
         for columna = 1:n
             if(columna == 1) 
-                iEstatura = matriz (fila, columna);
+                iX = matriz (fila, columna);
 
             else 
 
-                iEdad = matriz (fila, columna);
+                iY = matriz (fila, columna);
             end
 
 
         end
     
-        for filaD= 1:length(intervalosEstaturas) -1 
+        for filaD= 1:length(intervalosX) -1 
         
-            for columnaD = 1:length(intervalosEdades) -1  
+            for columnaD = 1:length(intervalosY) -1  
             
-                if (filaD == numel(intervalosEstaturas)-1 && columnaD == numel(intervalosEdades)-1)
+                if (filaD == numel(intervalosX)-1 && columnaD == numel(intervalosY)-1)
                     
-                    if (iEstatura >= intervalosEstaturas(filaD) && iEstatura <= intervalosEstaturas(filaD + 1)) && (iEdad>=intervalosEdades(columnaD) && iEdad <= intervalosEdades(columnaD + 1))
+                    if (iX >= intervalosX(filaD) && iX <= intervalosX(filaD + 1)) && (iY>=intervalosY(columnaD) && iY <= intervalosY(columnaD + 1))
  
                         matrizD(filaD, columnaD) = matrizD(filaD, columnaD) + 1;
                         break;
@@ -73,7 +73,7 @@ matrizD = zeros(numClases_estatura, numClases_edad);
 
                 else
 
-                    if(iEstatura >= intervalosEstaturas(filaD) && iEstatura < intervalosEstaturas(filaD + 1)) && (iEdad>=intervalosEdades(columnaD) && iEdad < intervalosEdades(columnaD + 1))
+                    if(iX >= intervalosX(filaD) && iX < intervalosX(filaD + 1)) && (iY>=intervalosY(columnaD) && iY < intervalosY(columnaD + 1))
                         matrizD(filaD, columnaD) = matrizD(filaD, columnaD) + 1;
                         break;
                     end
@@ -86,54 +86,54 @@ matrizD = zeros(numClases_estatura, numClases_edad);
 
    end
 
-   intervalosEstatura_tabla = [];
+   intervalosX_tabla = [];
 
-for intervaloT = intervalosEstaturas
-    for indice = 1:numel(intervalosEstaturas)-1
-        intervaloInf = "[" + num2str(intervalosEstaturas(indice));
+for intervaloT = intervalosX
+    for indice = 1:numel(intervalosX)-1
+        intervaloInf = "[" + num2str(intervalosX(indice));
     
-        if indice == numel(intervalosEstaturas)-1
-            intervaloSup = num2str(intervalosEstaturas(indice+1)) + "]";
+        if indice == numel(intervalosX)-1
+            intervaloSup = num2str(intervalosX(indice+1)) + "]";
         else
-            intervaloSup = num2str(intervalosEstaturas(indice+1)) + ")";
+            intervaloSup = num2str(intervalosX(indice+1)) + ")";
         end
     
         intervalo = strcat(intervaloInf, " - ", intervaloSup);
-        intervalosEstatura_tabla{indice} = intervalo;
+        intervalosX_tabla{indice} = intervalo;
     end 
 
 
 end
 
-intervalosEdad_tabla = [];
+intervalosY_tabla = [];
 
-for intervaloT = intervalosEdades
-    for indice = 1:numel(intervalosEdades)-1
-        intervaloInf = "[" + num2str(intervalosEdades(indice));
+for intervaloT = intervalosY
+    for indice = 1:numel(intervalosY)-1
+        intervaloInf = "[" + num2str(intervalosY(indice));
     
-        if indice == numel(intervalosEdades)-1
-            intervaloSup = num2str(intervalosEdades(indice+1)) + "]";
+        if indice == numel(intervalosY)-1
+            intervaloSup = num2str(intervalosY(indice+1)) + "]";
         else
-            intervaloSup = num2str(intervalosEdades(indice+1)) + ")";
+            intervaloSup = num2str(intervalosY(indice+1)) + ")";
         end
     
         intervalo = strcat(intervaloInf, " - ", intervaloSup);
-        intervalosEdad_tabla{indice} = intervalo;
+        intervalosY_tabla{indice} = intervalo;
     end 
 
 
 end
 
 % Convertir las celdas a un arreglo de cadenas
-intervalosEstatura_tabla = string(intervalosEstatura_tabla);
-intervalosEdad_tabla = string(intervalosEdad_tabla);
+intervalosX_tabla = string(intervalosX_tabla);
+intervalosY_tabla = string(intervalosY_tabla);
 
    % Crear la tabla con los datos de matrizD
 tabla = array2table(matrizD);
 
 % Establecer los nombres de las filas y columnas
-tabla.Properties.RowNames = intervalosEstatura_tabla;
-tabla.Properties.VariableNames = intervalosEdad_tabla;
+tabla.Properties.RowNames = intervalosX_tabla;
+tabla.Properties.VariableNames = intervalosY_tabla;
 
 % Mostrar la tabla
 disp(tabla);
