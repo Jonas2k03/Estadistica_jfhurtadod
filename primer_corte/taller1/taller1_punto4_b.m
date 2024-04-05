@@ -141,7 +141,7 @@ modaSimulados = mode(ds);
 desvEstCrudos = std(A);
 
 %Desviación estandar de los datos tabulados
-desvEstTabulados = sqrt(sum(fa.*((mc-mediaTabulados).^(2)))/length(A)-1);
+desvEstTabulados = sqrt(sum(fa.*((mc-mediaTabulados).^(2)))/length(A));
 
 desvEstSimulados = std(ds);
 

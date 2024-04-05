@@ -1,5 +1,5 @@
 clc;
-
+dc = ds;
 %CREACION DE LA TABLA DE FRECUENCIAS. 
 % CALCULAR EL MAXIMO DATO
 maximo = max(dc);
@@ -202,4 +202,18 @@ hist(ds, nc, 'FaceColor', 'salmon', 'EdgeColor', 'black');
 title('Histograma de Datos Simulados');
 xlabel('Valor');
 ylabel('Frecuencia');
+
+dev3Derecha = modaSimulados + 3*desvEstSimulados;
+dev3Izquierda = modaSimulados - 3*desvEstSimulados;
+
+multa = 0;
+
+
+datosMayor3dv = length(find(dc>dev3Derecha));
+
+if (datosMayor3dv > 0)  
+    multa = 500000 * datosMayor3dv;
+end
+
+    disp("El opererario debe pagar USD $" + multa  + " de multa" )
 

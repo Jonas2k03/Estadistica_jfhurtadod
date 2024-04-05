@@ -78,6 +78,7 @@ boxplot(clmMaxZ);
 title('Boxplot antes del filtro');
 
 %Boxplot después del filtro
+figure
 boxplot(A);
 title('Boxplot después del filtro');
 

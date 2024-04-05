@@ -1335,5 +1335,5 @@ maxZ = max(abs(z));
 clmMaxZ = dc(:, clmIndice);
 disp(['La columna con los datos más extremos fuera del filtro Z es la columna ', num2str(clmIndice)]);
 
-nc = 7;
-ns = 2000;
+nc = 10;
+ns = 15000;
