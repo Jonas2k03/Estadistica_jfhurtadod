@@ -1321,9 +1321,3 @@ dataE = [ 0.0200   -0.2800   -0.2300    0.5700   -0.2100   -0.0200   -0.0100    
 
 [filas_dataE,columnas_dataE] = size(dataE);
 
-dataE = [1 2 3
-         1 2 3
-         1 2 3];
-
-[filas_dataE,columnas_dataE] = size(dataE);
-

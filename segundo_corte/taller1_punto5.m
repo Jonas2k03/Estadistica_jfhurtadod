@@ -22,8 +22,8 @@ diag_mc_inv = diag(mc_inv);
 r2 = 1 - (1 ./ (diag_mc .* diag_mc_inv));
 
 % Seleccionar la columna que mejor explica los datos
-colMejorExplicada = find(r2 == max(r2)); 
-y = dataE(:, colMejorExplicada);
+colExplicar = find(r2 == max(r2)); 
+y = dataE(:, colExplicar);
 
 % Matriz de X: 
 x = ones(filas_dataE, columnas_dataE - 1); 
@@ -31,7 +31,7 @@ x = ones(filas_dataE, columnas_dataE - 1);
 for fila = 1:filas_dataE
     col_x = 2; 
     for columna = 1:columnas_dataE
-        if columna == colMejorExplicada
+        if columna == colExplicar
             continue; 
         else
             x(fila, col_x) = dataE(fila, columna); 
