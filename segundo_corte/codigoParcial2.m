@@ -43,6 +43,52 @@ clc;
 %Buscar el modelo 
 
 modelo_lineal = fitlm(x, y);
+modelo_lineal
+
+anovaTabla = anova(modelo_lineal, 'summary');
+pValorModelo = anovaTabla{'Model','pValue'};
+variables = [1:size(x, 2)]; % Índices de las variables explicativas
+%Vector de betas
+    betahat = modelo_lineal.Coefficients.Estimate;
+    
+if pValorModelo <= 0.05
+    
+    while true
+        v_pvalor = modelo_lineal.Coefficients.pValue;
+        v_tStat = modelo_lineal.Coefficients.tStat;
+        if(v_pvalor(1) > 0.05 || abs(v_tStat(1)) < 2 )
+        betahat(1) = 0; %%%%%%%%%%%%%%%%%%%%%%%PREGUNTAR COMO REFLEJAR EL VALOR NULO DE BETAHAT EN EL MODELO
+        end
+        if all(v_pvalor(2:end) < 0.05) || all(abs(v_tStat(2:end)) > 2)
+            fprintf('Todos los coeficientes son significativos.\n');
+            break; % Si todos son significativos, termina el ciclo
+        else
+            max_pvalor = max(v_pvalor(2:end));
+            [~, idx] = max(v_pvalor(2:end)); % Ignora el intercepto buscando desde el segundo elemento
+            idx = idx + 1; % Ajustar el índice porque se ignoró el primer elemento (intercepto)
+            
+            if max_pvalor > 0.05 && abs(v_tStat(idx)) < 2
+                % Mostrar la variable a eliminar
+                fprintf('Eliminando variable menos significativa: Variable %d con p-valor %.4f y tStat %.4f\n', variables(idx-1), v_pvalor(idx), v_tStat(idx));
+                
+                % Eliminar la columna correspondiente del predictor menos significativo
+                x(:, idx-1) = []; % Ajustar el índice al usar 1 basado en MATLAB
+                variables(idx-1) = []; % Registrar qué variable fue eliminada
+
+                % Recalcular el modelo después de eliminar la variable
+                modelo_lineal = fitlm(x, y)
+            end
+        end
+    end
+end
+
+% Mostrar el modelo final y las variables que permanecen
+disp('Modelo final:');
+disp(modelo_lineal);
+disp('Variables que permanecen:');
+disp(variables);
+
+
 
 %2. ¿Hay modelo? Lo hay si el fstatisic-p valor < 0.05
 
@@ -50,10 +96,11 @@ modelo_lineal = fitlm(x, y);
 
     %Vector de betas
     betahat = modelo_lineal.Coefficients.Estimate;
-    betahat(colExplicar) = []; %PREGUNTA 1
+    pvalor = modelo_lineal.Coefficients.pValue;
+    XX=[ones(length(x),1) x];
 
     %Columna explicada (y)estimada 
-    y_estimados = x * betahat;
+    y_estimados = XX * betahat;
 
     %residuales
     r = y-y_estimados;
@@ -64,4 +111,4 @@ modelo_lineal = fitlm(x, y);
 
 %PERFECCIONAMIENTO EN UN ALPHA PORCIENTO
 
-modelo_lineal = perfeccionar_modelo(x,y,0.90,colExplicar);
+modelo_lineal = perfeccionar_modelo(x,y,0.90);

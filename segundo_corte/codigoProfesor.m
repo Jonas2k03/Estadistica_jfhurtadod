@@ -28,7 +28,7 @@ while R2<0.90
 lm=fitlm(X,y)
 betahat=lm.Coefficients.Estimate
 n=length(X);
-XX=[ones(n,1) X];
+XX=[ones(n,1) X]; %%ACA LA DIFERENCIA EN LA PREGUNTA 1
 yhat=XX*betahat;
 r=y-yhat;
 %hist(r)
