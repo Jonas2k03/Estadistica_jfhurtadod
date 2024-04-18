@@ -39,9 +39,10 @@ clc;
 matriz = [data_x, data_y];
 [m,n] = size(matriz);
 
-matrizD = zeros(numClases_x, numClases_y);
+matrizD = zeros(numClases_x, numClases_y+1);
 [mD,nD] = size(matrizD);
 
+matrizDR = zeros(numClases_x, numClases_y+1);
 
 
 
@@ -68,6 +69,7 @@ matrizD = zeros(numClases_x, numClases_y);
                     if (iX >= intervalosX(filaD) && iX <= intervalosX(filaD + 1)) && (iY>=intervalosY(columnaD) && iY <= intervalosY(columnaD + 1))
  
                         matrizD(filaD, columnaD) = matrizD(filaD, columnaD) + 1;
+                        matrizD(filaD, nD) = matrizD(filaD, nD) + 1;
                         break;
                     end
 
@@ -75,15 +77,31 @@ matrizD = zeros(numClases_x, numClases_y);
 
                     if(iX >= intervalosX(filaD) && iX < intervalosX(filaD + 1)) && (iY>=intervalosY(columnaD) && iY < intervalosY(columnaD + 1))
                         matrizD(filaD, columnaD) = matrizD(filaD, columnaD) + 1;
+                        matrizD(filaD, nD) = matrizD(filaD, nD) + 1;
                         break;
                     end
                 end
+                
 
             end
 
-
+            
         end
 
+   end
+
+    for i = 1:mD
+        for j = matrizD(i,nD)
+            if(i~=1)
+                matrizD(i, nD) = matrizD(i-1, nD) + j;
+            end
+        end
+   end
+
+   for i = 1:mD
+        for j = 1:nD
+            matrizDR(i,j) = matrizD(i,j)/length(medidas);
+        end
    end
 
    intervalosX_tabla = [];
@@ -120,23 +138,34 @@ for intervaloT = intervalosY
         intervalo = strcat(intervaloInf, " - ", intervaloSup);
         intervalosY_tabla{indice} = intervalo;
     end 
+    
 
 
 end
+intervalosY_tabla{nD} = "*";
 
 % Convertir las celdas a un arreglo de cadenas
 intervalosX_tabla = string(intervalosX_tabla);
 intervalosY_tabla = string(intervalosY_tabla);
 
    % Crear la tabla con los datos de matrizD
-tabla = array2table(matrizD);
+tablaAbsoluta = array2table(matrizD);
 
 % Establecer los nombres de las filas y columnas
-tabla.Properties.RowNames = intervalosX_tabla;
-tabla.Properties.VariableNames = intervalosY_tabla;
+tablaAbsoluta.Properties.RowNames = intervalosX_tabla;
+tablaAbsoluta.Properties.VariableNames = intervalosY_tabla;
 
-% Mostrar la tabla
-disp(tabla);
+% Mostrar la tablaAbsoluta
+disp(tablaAbsoluta);
+
+tablaRelativa = array2table(matrizDR);
+
+% Establecer los nombres de las filas y columnas
+tablaRelativa.Properties.RowNames = intervalosX_tabla;
+tablaRelativa.Properties.VariableNames = intervalosY_tabla;
+
+% Mostrar la tablaAbsoluta
+disp(tablaRelativa);
 
 
 
