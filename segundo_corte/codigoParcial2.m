@@ -1,8 +1,12 @@
-
 % CODIGO PARA EL SEGUNDO PARCIAL DE ESTADISTICA % 
+%ORIGEN DE DATOS
+dataset = dataE;
+
+[filas_dataE,columnas_dataE] = size(dataset);
 
 % Matriz de covarianza
-mc = cov(dataE);
+
+mc = cov(dataset);
 [~, columnasMC] = size(mc);
 
 % Inversa de la matriz de covarianza
@@ -18,10 +22,10 @@ diag_mc_inv = diag(mc_inv);
 r2 = 1 - (1 ./ (diag_mc .* diag_mc_inv));
 
 % Seleccionar la columna que mejor explica los datos
-% colExplicar = find(r2 == max(r2)); %CAPTURAR LA MÁS EXPLICADA
+colExplicar = find(r2 == max(r2)); %CAPTURAR LA MÁS EXPLICADA
 
-colExplicar = 1; %ELEGIR ARBITRARIAMENTE LA COLUMNA A EXPLICAR
-y = dataE(:, colExplicar);
+%colExplicar = 1; %ELEGIR ARBITRARIAMENTE LA COLUMNA A EXPLICAR
+y = dataset(:, colExplicar);
 
 %LOGICA MATRIZ PARA LA FUNCION fitlm
 
@@ -34,7 +38,7 @@ for fila = 1:filas_dataE
         if columna == colExplicar
             continue; 
         else
-            x(fila, col_x) = dataE(fila, columna); 
+            x(fila, col_x) = dataset(fila, columna); 
             col_x = col_x + 1;
         end
     end
@@ -76,7 +80,7 @@ if pValorModelo <= 0.05
             
             if max_pvalor > 0.05 && abs(v_tStat(idx)) < 2
                 % Mostrar la variable a eliminar
-                fprintf('<strong> <color = "red">Eliminando variable menos significativa: Variable %d con p-valor %.4f y tStat %.4f\n </strong>', variables(idx-1), v_pvalor(idx), v_tStat(idx));
+                fprintf('<strong>Eliminando variable menos significativa: Variable %d con p-valor %.4f y tStat %.4f\n </strong>', variables(idx-1), v_pvalor(idx), v_tStat(idx));
                 
                 % Eliminar la columna correspondiente del predictor menos significativo
                 x(:, idx-1) = []; % Ajustar el índice al usar 1 basado en MATLAB
@@ -92,7 +96,8 @@ if pValorModelo <= 0.05
     end
 
     if(v_pvalor(1) > 0.05)
-        betahat(1) = 0; %%%%%%%%%%%%%%%%%%%%%%%PREGUNTAR COMO REFLEJAR EL VALOR NULO DE BETAHAT EN EL MODELO
+        disp("<strong>El intercepto NO es significativo, pues su p-valor: " + v_pvalor(1) + " es mayor a 0.05. </strong>" );
+        betahat(1) = 0;
     end
         % Mostrar el modelo final y las variables que permanecen
     disp('<strong>Modelo final: </strong>');
@@ -112,24 +117,63 @@ if pValorModelo <= 0.05
     y_estimados = XX * betahat;
 
     %residuales
-    r = y-y_estimados;
+    r = y_estimados-y;
     figure;
     hist(r);
-    title("Histograma de residualessin mejorar con un " + (modelo_lineal.Rsquared.Adjusted * 100) + "%")
+    title("Histograma de residuales sin mejorar con un " + (modelo_lineal.Rsquared.Adjusted * 100) + "%")
 
+    %Calculo de matriz de correlación
+    correlacion = corr(x);
+
+    [filasCor, columnasCor] = size(correlacion);
+    correlacion_comparar = [];
+    for i= 1:filasCor
+        for j= 1:columnasCor
+            if correlacion(i, j) == 1
+                break;
+            else
+                correlacion_comparar = [correlacion_comparar correlacion(i, j)];
+            end
+        end
+    end
+
+    disp("Vector con los datos de la matriz de correlación: ")
+    disp(correlacion_comparar')
+    max_dependiente = max(correlacion_comparar);
+    disp("Máxima entrada de la matriz correlación: " + max_dependiente)
+    min_dependiente = min(correlacion_comparar);
+    disp("Mínima entrada de la matriz de correlación: " + min_dependiente)
+    
+    figure;
+    plotmatrix(x);
+    title("Matriz de correlación de coeficientes");
 
     %PERFECCIONAMIENTO EN UN ALPHA PORCIENTO
     
-    modelo_lineal = perfeccionar_modelo(x,y,0.90);
+   %[modelo_lineal,y_estimados,r,y] = perfeccionar_modelo(x,y,0.95);
     disp("Modelo Lineal perfeccionado a " + modelo_lineal.Rsquared.Adjusted);
     disp(modelo_lineal);
+
+
+    %%%%%%OTRO DIAGNOSTICO
+
+    media_y = mean(y);
+    media_y_estimados = mean(y_estimados);
+    media_r = mean(r);
+
+    SCT=sum((y-media_y).^2);
+    SMC = sum((y_estimados - media_y_estimados).^2);
+    SCR = sum((r-media_r).^2);
+    SCT2 = SMC + SCR;
+
+    disp("<strong>Suma de los cuadraos totales: </strong>" + SCT );
+    disp("<strong>Suma de los cuadraos totales calculados: </strong>" + (SCT2));
+    disp("<strong>Proporción del modelo calculado por fitlm: </strong>" + modelo_lineal.Rsquared.Adjusted);
+    disp("<strong>Proporción del modelo calculado manual: </strong>" + (SMC/SCT));
+    disp("<strong>Proporción del resdual calculado manual: </strong>" + (SCR/SCT));
+
+
 
 else
     disp("<strong>NO hay modelo lineal</strong>");
 end
-
-
-
-
-
-

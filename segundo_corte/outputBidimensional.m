@@ -142,7 +142,7 @@ for intervaloT = intervalosY
 
 
 end
-intervalosY_tabla{nD} = "*";
+intervalosY_tabla{nD} = "Acumulado";
 
 % Convertir las celdas a un arreglo de cadenas
 intervalosX_tabla = string(intervalosX_tabla);
@@ -156,6 +156,9 @@ tablaAbsoluta.Properties.RowNames = intervalosX_tabla;
 tablaAbsoluta.Properties.VariableNames = intervalosY_tabla;
 
 % Mostrar la tablaAbsoluta
+    disp("---------------------------------------------------------------------")
+    disp("                TABLA DE FRECUENCIAS ABSOLUTAS                             ")
+    disp("---------------------------------------------------------------------")
 disp(tablaAbsoluta);
 
 tablaRelativa = array2table(matrizDR);
@@ -165,6 +168,9 @@ tablaRelativa.Properties.RowNames = intervalosX_tabla;
 tablaRelativa.Properties.VariableNames = intervalosY_tabla;
 
 % Mostrar la tablaAbsoluta
+    disp("---------------------------------------------------------------------")
+    disp("                TABLA DE FRECUENCIAS RELATIVAS                             ")
+    disp("---------------------------------------------------------------------")
 disp(tablaRelativa);
 
 
