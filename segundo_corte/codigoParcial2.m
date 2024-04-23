@@ -150,7 +150,7 @@ if pValorModelo <= 0.05
 
     %PERFECCIONAMIENTO EN UN ALPHA PORCIENTO
     
-   %[modelo_lineal,y_estimados,r,y] = perfeccionar_modelo(x,y,0.95);
+   [modelo_lineal,y_estimados,r,y] = perfeccionar_modelo(x,y,0.95);
     disp("Modelo Lineal perfeccionado a " + modelo_lineal.Rsquared.Adjusted);
     disp(modelo_lineal);
 
