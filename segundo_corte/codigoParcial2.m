@@ -1,6 +1,6 @@
 % CODIGO PARA EL SEGUNDO PARCIAL DE ESTADISTICA % 
 %ORIGEN DE DATOS
-dataset = dataE;
+dataset = data;
 
 [filas_dataE,columnas_dataE] = size(dataset);
 
@@ -20,11 +20,10 @@ diag_mc_inv = diag(mc_inv);
 
 % Indicador R
 r2 = 1 - (1 ./ (diag_mc .* diag_mc_inv));
-
 % Seleccionar la columna que mejor explica los datos
-colExplicar = find(r2 == max(r2)); %CAPTURAR LA MÁS EXPLICADA
+%colExplicar = find(r2 == max(r2)); %CAPTURAR LA MÁS EXPLICADA
 
-%colExplicar = 1; %ELEGIR ARBITRARIAMENTE LA COLUMNA A EXPLICAR
+colExplicar = 3; %ELEGIR ARBITRARIAMENTE LA COLUMNA A EXPLICAR
 y = dataset(:, colExplicar);
 
 %LOGICA MATRIZ PARA LA FUNCION fitlm
