@@ -1,9 +1,9 @@
 function [modelo_perfeccionado, y_estimados_perfeccionado, r_perfeccionado,y_explicada] = perfeccionar_modelo(x_explicativas, y_explicada, porcentaje_deseado)
 
     cantidad_datos_original = length(x_explicativas);
-    
+    modelo_perfeccionado = fitlm(x_explicativas, y_explicada);
     while (true) 
-        modelo_perfeccionado = fitlm(x_explicativas, y_explicada);
+        
         betahat = modelo_perfeccionado.Coefficients.Estimate;
         XX=[ones(length(x_explicativas),1) x_explicativas];
 
@@ -15,7 +15,9 @@ function [modelo_perfeccionado, y_estimados_perfeccionado, r_perfeccionado,y_exp
 
         x_explicativas(iMaximo_residual,:)=[];
         y_explicada(iMaximo_residual,:)=[];
+        y_estimados_perfeccionado(iMaximo_residual,:)=[];
         XX(iMaximo_residual,:)=[];
+        modelo_perfeccionado = fitlm(x_explicativas, y_explicada);
         r2 = modelo_perfeccionado.Rsquared.Adjusted;
       
         if (r2 >= porcentaje_deseado)

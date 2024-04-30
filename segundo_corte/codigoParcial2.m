@@ -137,38 +137,11 @@ if pValorModelo <= 0.05
     hist(r);
     title("Histograma de residuales sin mejorar con un " + (modelo_lineal.Rsquared.Adjusted * 100) + "%")
 
-    %Calculo de matriz de correlación
-    correlacion = corr(x);
-
-    [filasCor, columnasCor] = size(correlacion);
-    correlacion_comparar = [];
-    for i= 1:filasCor
-        for j= 1:columnasCor
-            if correlacion(i, j) == 1
-                break;
-            else
-                correlacion_comparar = [correlacion_comparar correlacion(i, j)];
-            end
-        end
-    end
-
-    disp("Vector con los datos de la matriz de correlación: ")
-    disp(correlacion_comparar')
-    max_dependiente = max(correlacion_comparar);
-    disp("Máxima entrada de la matriz correlación: " + max_dependiente)
-    min_dependiente = min(correlacion_comparar);
-    disp("Mínima entrada de la matriz de correlación: " + min_dependiente)
-    
-    figure;
-    plotmatrix(x);
-    title("Matriz de correlación de coeficientes");
-
-    %PERFECCIONAMIENTO EN UN ALPHA PORCIENTO
-    
-   [modelo_lineal,y_estimados,r,y] = perfeccionar_modelo(x,y,0.95);
+    [modelo_lineal,y_estimados,r,y] = perfeccionar_modelo(x,y,0.902);
     disp("Modelo Lineal perfeccionado a " + modelo_lineal.Rsquared.Adjusted);
     disp(modelo_lineal);
-
+    disp("<strong>Ecuacion del modelo: </strong>")
+    disp(imprimir_modelo(modelo_lineal,variables'))
 
     %%%%%%OTRO DIAGNOSTICO
 
