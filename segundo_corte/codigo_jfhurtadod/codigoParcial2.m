@@ -11,7 +11,7 @@ mc = cov(dataset);
 
 % Inversa de la matriz de covarianza
 
-mc_inv = mc / eye(columnasMC);
+%%mc_inv = mc / eye(columnasMC);
 mc_inv = inv(mc);
 
 
@@ -56,20 +56,12 @@ modelo_lineal = fitlm(x, y);
     disp("---------------------------------------------------------------------")
 disp(modelo_lineal)
 
-
-
 anovaTabla = anova(modelo_lineal, 'summary');
 pValorModelo = anovaTabla{'Model','pValue'};
-variables=[];
-for i = 1:columnasMC
-    if (i==colExplicar)
-        continue;
-    end
-variables = [variables i];
-end
-str_ecModelo = imprimir_modelo(modelo_lineal,variables');
-disp(str_ecModelo)
-     
+variables = [1:size(x, 2)]; % Índices de las variables explicativas
+%Vector de betas
+    
+    
 if pValorModelo <= 0.05
     iteracion = 1;
     
@@ -99,10 +91,7 @@ if pValorModelo <= 0.05
                 % Recalcular el modelo después de eliminar la variable
                 modelo_lineal = fitlm(x, y);
                 disp(modelo_lineal);
-                disp("<strong>Ecuacion del modelo: </strong>")
-                disp(imprimir_modelo(modelo_lineal,variables'))
                 betahat = modelo_lineal.Coefficients.Estimate;
- 
             end
         end
         iteracion = iteracion + 1;
@@ -115,8 +104,6 @@ if pValorModelo <= 0.05
         % Mostrar el modelo final y las variables que permanecen
     disp('<strong>Modelo final: </strong>');
     disp(modelo_lineal);
-    disp("<strong>Ecuacion del modelo: </strong>")
-    disp(imprimir_modelo(modelo_lineal,variables'))
     disp('<strong>Variables que permanecen: </strong>');
     disp(variables);
 
